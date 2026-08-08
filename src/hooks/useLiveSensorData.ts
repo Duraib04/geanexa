@@ -226,6 +226,7 @@ export function useLiveSensorData() {
 
   return {
     latestReading,
+    lastValidReading,
     readings,
     aggregatedData,
     chartData,
