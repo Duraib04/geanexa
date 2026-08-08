@@ -56,10 +56,32 @@ export function LiveSensorPanel({
 
   // Map raw soil integer to a moisture percentage for display
   const soilPercent = (raw: number | null) => {
-    if (raw === null) return 0;
+    if (raw === null) return null;
     if (raw <= 100) return raw;
     return Math.round(((1023 - raw) / 1023) * 100);
   };
+
+  const displayTemperature =
+    (latestReading?.temperature && latestReading.temperature !== 0)
+      ? latestReading.temperature
+      : lastValidReading.temperature;
+
+  const displayHumidity =
+    (latestReading?.humidity && latestReading.humidity !== 0)
+      ? latestReading.humidity
+      : lastValidReading.humidity;
+
+  const displaySoilMoisture =
+    (latestReading?.soil_moisture && latestReading.soil_moisture !== 0)
+      ? soilPercent(latestReading.soil_moisture)
+      : soilPercent(lastValidReading.soil_moisture);
+
+  const hasAnyValidValue =
+    displayTemperature != null ||
+    displayHumidity != null ||
+    displaySoilMoisture != null ||
+    lastValidReading.rain != null ||
+    lastValidReading.pump != null;
 
   return (
     <Card className="border-2 border-primary/30 shadow-lg">
