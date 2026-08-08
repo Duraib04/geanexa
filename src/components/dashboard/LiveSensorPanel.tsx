@@ -74,7 +74,7 @@ export function LiveSensorPanel({
   const displaySoilMoisture =
     (latestReading?.soil_moisture && latestReading.soil_moisture !== 0)
       ? soilPercent(latestReading.soil_moisture)
-      : soilPercent(lastValidReading.soil_moisture);
+      : soilPercent(lastValidReading.soilMoisture);
 
   const hasAnyValidValue =
     displayTemperature != null ||
