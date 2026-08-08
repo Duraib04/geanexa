@@ -212,13 +212,13 @@ export function LiveSensorPanel({
                             {formatTime(r.created_at)}
                           </td>
                           <td className="text-right px-3 py-1.5">
-                            {r.temperature?.toFixed(1) ?? "--"}
+                            {r.temperature && r.temperature !== 0 ? r.temperature.toFixed(1) : "--"}
                           </td>
                           <td className="text-right px-3 py-1.5">
-                            {r.humidity?.toFixed(1) ?? "--"}
+                            {r.humidity && r.humidity !== 0 ? r.humidity.toFixed(1) : "--"}
                           </td>
                           <td className="text-right px-3 py-1.5">
-                            {r.soil_moisture !== null ? soilPercent(r.soil_moisture) : "--"}
+                            {r.soil_moisture && r.soil_moisture !== 0 ? soilPercent(r.soil_moisture) : "--"}
                           </td>
                           <td className="text-center px-3 py-1.5">
                             {(r.rain ?? "").toUpperCase() === "YES" ? (
