@@ -58,10 +58,11 @@ const Index = () => {
   } = useLiveSensorData();
 
   // Prefer live ESP32 data over farm-based sensor_readings
+  // Use last valid reading so the screen never shows empty/0 values
   const aggregatedData = liveData.lastUpdate ? {
-    soilMoisture: liveData.soilMoisture,
-    temperature: liveData.temperature,
-    humidity: liveData.humidity,
+    soilMoisture: liveLastValidReading.soilMoisture ?? liveData.soilMoisture,
+    temperature: liveLastValidReading.temperature ?? liveData.temperature,
+    humidity: liveLastValidReading.humidity ?? liveData.humidity,
     phLevel: farmSensorData.phLevel,
     nitrogen: farmSensorData.nitrogen,
     phosphorus: farmSensorData.phosphorus,
