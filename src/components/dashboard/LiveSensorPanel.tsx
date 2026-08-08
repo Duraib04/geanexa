@@ -1,9 +1,9 @@
-// Real-time ESP32 sensor data panel — reads directly from smart_bloom_data in Supabase
+// Real-time ESP32 sensor data panel — reads directly from sensor_readings_v2 in Supabase
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { SmartBloomReading } from "@/hooks/useLiveSensorData";
+import { SmartBloomReading, LastValidReading } from "@/hooks/useLiveSensorData";
 import {
   Thermometer,
   Droplets,
@@ -17,6 +17,7 @@ import {
 
 interface LiveSensorPanelProps {
   latestReading: SmartBloomReading | null;
+  lastValidReading: LastValidReading;
   readings: SmartBloomReading[];
   isConnected: boolean;
   isLoading: boolean;
