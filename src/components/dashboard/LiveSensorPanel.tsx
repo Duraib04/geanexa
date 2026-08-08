@@ -27,6 +27,7 @@ interface LiveSensorPanelProps {
 
 export function LiveSensorPanel({
   latestReading,
+  lastValidReading,
   readings,
   isConnected,
   isLoading,
