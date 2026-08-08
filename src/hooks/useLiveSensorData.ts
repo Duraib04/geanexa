@@ -45,9 +45,59 @@ export interface LiveChartPoint {
 
 const TABLE = "sensor_readings_v2" as const;
 
+function getLastValidValues(rows: SmartBloomReading[]): LastValidReading {
+  const findLast = <T>(
+    list: SmartBloomReading[],
+    getter: (r: SmartBloomReading) => T | null | undefined,
+    isValid: (v: T) => boolean
+  ): { value: T; createdAt: string } | null => {
+    for (const r of list) {
+      const v = getter(r);
+      if (v != null && isValid(v)) {
+        return { value: v, createdAt: r.created_at };
+      }
+    }
+    return null;
+  };
+
+  const soil = findLast(rows, (r) => r.soil_moisture, (v) => typeof v === "number" && v > 0 && v <= 100);
+  const temp = findLast(rows, (r) => r.temperature, (v) => typeof v === "number" && v !== 0);
+  const hum = findLast(rows, (r) => r.humidity, (v) => typeof v === "number" && v !== 0);
+  const css = findLast(rows, (r) => r.css, (v) => typeof v === "number" && v !== 0);
+  const flow = findLast(rows, (r) => r.flow, (v) => typeof v === "number" && v !== 0);
+  const rain = findLast(rows, (r) => r.rain, (v) => typeof v === "string" && v.trim() !== "");
+  const pump = findLast(rows, (r) => r.pump, (v) => typeof v === "string" && v.trim() !== "");
+
+  const timestamps = [soil?.createdAt, temp?.createdAt, hum?.createdAt, css?.createdAt, flow?.createdAt, rain?.createdAt, pump?.createdAt].filter(Boolean) as string[];
+  const latestTimestamp = timestamps.length > 0
+    ? timestamps.sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0]
+    : null;
+
+  return {
+    soilMoisture: soil?.value ?? null,
+    temperature: temp?.value ?? null,
+    humidity: hum?.value ?? null,
+    css: css?.value ?? null,
+    flow: flow?.value ?? null,
+    rain: rain?.value ?? null,
+    pump: pump?.value ?? null,
+    createdAt: latestTimestamp,
+  };
+}
+
 export function useLiveSensorData() {
   const [latestReading, setLatestReading] = useState<SmartBloomReading | null>(null);
   const [readings, setReadings] = useState<SmartBloomReading[]>([]);
+  const [lastValidReading, setLastValidReading] = useState<LastValidReading>({
+    soilMoisture: null,
+    temperature: null,
+    humidity: null,
+    css: null,
+    flow: null,
+    rain: null,
+    pump: null,
+    createdAt: null,
+  });
   const [aggregatedData, setAggregatedData] = useState<LiveAggregatedData>({
     soilMoisture: 0,
     temperature: 0,
