@@ -250,7 +250,7 @@ export function LiveSensorPanel({
         ) : (
           <div className="text-center py-8 text-muted-foreground">
             <WifiOff className="h-8 w-8 mx-auto mb-2 opacity-40" />
-            <p>No sensor data found in <code>smart_bloom_data</code>.</p>
+            <p>No valid sensor data found.</p>
             <p className="text-xs mt-1">Make sure your ESP32 is publishing rows to Supabase.</p>
           </div>
         )}
