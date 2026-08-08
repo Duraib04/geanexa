@@ -26,6 +26,17 @@ export interface LiveAggregatedData {
   lastUpdate: string | null;
 }
 
+export interface LastValidReading {
+  soilMoisture: number | null;
+  temperature: number | null;
+  humidity: number | null;
+  css: number | null;
+  flow: number | null;
+  rain: string | null;
+  pump: string | null;
+  createdAt: string | null;
+}
+
 export interface LiveChartPoint {
   time: string;
   moisture: number;
