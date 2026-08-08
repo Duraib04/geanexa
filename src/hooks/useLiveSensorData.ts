@@ -152,6 +152,7 @@ export function useLiveSensorData() {
         setReadings(rows);
         setLatestReading(rows[0]);
         setAggregatedData(mapToAggregated(rows[0]));
+        setLastValidReading(getLastValidValues(rows));
         setChartData(buildChartData(rows.slice(0, 24)));
         setIsConnected(true);
       } else {
