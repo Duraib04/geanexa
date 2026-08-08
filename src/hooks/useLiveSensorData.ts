@@ -183,6 +183,7 @@ export function useLiveSensorData() {
           setReadings((prev) => {
             const updated = [newReading, ...prev.slice(0, 49)];
             setChartData(buildChartData(updated.slice(0, 24)));
+            setLastValidReading(getLastValidValues(updated));
             return updated;
           });
           setIsConnected(true);
