@@ -46,6 +46,7 @@ const Index = () => {
   // LIVE ESP32 data from smart_bloom_data table
   const {
     latestReading: liveLatestReading,
+    lastValidReading: liveLastValidReading,
     readings: liveReadings,
     aggregatedData: liveData,
     chartData: liveChartData,
@@ -57,10 +58,11 @@ const Index = () => {
   } = useLiveSensorData();
 
   // Prefer live ESP32 data over farm-based sensor_readings
+  // Use last valid reading so the screen never shows empty/0 values
   const aggregatedData = liveData.lastUpdate ? {
-    soilMoisture: liveData.soilMoisture,
-    temperature: liveData.temperature,
-    humidity: liveData.humidity,
+    soilMoisture: liveLastValidReading.soilMoisture ?? liveData.soilMoisture,
+    temperature: liveLastValidReading.temperature ?? liveData.temperature,
+    humidity: liveLastValidReading.humidity ?? liveData.humidity,
     phLevel: farmSensorData.phLevel,
     nitrogen: farmSensorData.nitrogen,
     phosphorus: farmSensorData.phosphorus,
@@ -240,6 +242,7 @@ const Index = () => {
         <section className="animate-fade-in" style={{ animationDelay: "0.045s" }}>
           <LiveSensorPanel
             latestReading={liveLatestReading}
+            lastValidReading={liveLastValidReading}
             readings={liveReadings}
             isConnected={esp32Connected}
             isLoading={liveLoading}

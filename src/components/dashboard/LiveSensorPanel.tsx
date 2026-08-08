@@ -1,9 +1,9 @@
-// Real-time ESP32 sensor data panel — reads directly from smart_bloom_data in Supabase
+// Real-time ESP32 sensor data panel — reads directly from sensor_readings_v2 in Supabase
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { SmartBloomReading } from "@/hooks/useLiveSensorData";
+import { SmartBloomReading, LastValidReading } from "@/hooks/useLiveSensorData";
 import {
   Thermometer,
   Droplets,
@@ -17,6 +17,7 @@ import {
 
 interface LiveSensorPanelProps {
   latestReading: SmartBloomReading | null;
+  lastValidReading: LastValidReading;
   readings: SmartBloomReading[];
   isConnected: boolean;
   isLoading: boolean;
@@ -26,6 +27,7 @@ interface LiveSensorPanelProps {
 
 export function LiveSensorPanel({
   latestReading,
+  lastValidReading,
   readings,
   isConnected,
   isLoading,
@@ -54,10 +56,32 @@ export function LiveSensorPanel({
 
   // Map raw soil integer to a moisture percentage for display
   const soilPercent = (raw: number | null) => {
-    if (raw === null) return 0;
+    if (raw === null) return null;
     if (raw <= 100) return raw;
     return Math.round(((1023 - raw) / 1023) * 100);
   };
+
+  const displayTemperature =
+    (latestReading?.temperature && latestReading.temperature !== 0)
+      ? latestReading.temperature
+      : lastValidReading.temperature;
+
+  const displayHumidity =
+    (latestReading?.humidity && latestReading.humidity !== 0)
+      ? latestReading.humidity
+      : lastValidReading.humidity;
+
+  const displaySoilMoisture =
+    (latestReading?.soil_moisture && latestReading.soil_moisture !== 0)
+      ? soilPercent(latestReading.soil_moisture)
+      : soilPercent(lastValidReading.soilMoisture);
+
+  const hasAnyValidValue =
+    displayTemperature != null ||
+    displayHumidity != null ||
+    displaySoilMoisture != null ||
+    lastValidReading.rain != null ||
+    lastValidReading.pump != null;
 
   return (
     <Card className="border-2 border-primary/30 shadow-lg">
@@ -106,34 +130,34 @@ export function LiveSensorPanel({
         )}
 
         {/* ---------- Live Values Grid ---------- */}
-        {latestReading ? (
+        {hasAnyValidValue ? (
           <>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {/* Temperature */}
-              <div className="bg-orange-50 dark:bg-orange-950/30 rounded-xl p-4 text-center">
-                <Thermometer className="h-6 w-6 mx-auto text-orange-500 mb-1" />
-                <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                  {latestReading.temperature?.toFixed(1) ?? "--"}
+              <div className={`rounded-xl p-4 text-center ${displayTemperature != null ? "bg-orange-50 dark:bg-orange-950/30" : "bg-muted/30"}`}>
+                <Thermometer className={`h-6 w-6 mx-auto mb-1 ${displayTemperature != null ? "text-orange-500" : "text-muted-foreground/40"}`} />
+                <p className={`text-2xl font-bold ${displayTemperature != null ? "text-orange-600 dark:text-orange-400" : "text-muted-foreground"}`}>
+                  {displayTemperature != null ? displayTemperature.toFixed(1) : "--"}
                   <span className="text-sm font-normal ml-0.5">°C</span>
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">Temperature</p>
               </div>
 
               {/* Humidity */}
-              <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 text-center">
-                <Droplets className="h-6 w-6 mx-auto text-blue-500 mb-1" />
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {latestReading.humidity?.toFixed(1) ?? "--"}
+              <div className={`rounded-xl p-4 text-center ${displayHumidity != null ? "bg-blue-50 dark:bg-blue-950/30" : "bg-muted/30"}`}>
+                <Droplets className={`h-6 w-6 mx-auto mb-1 ${displayHumidity != null ? "text-blue-500" : "text-muted-foreground/40"}`} />
+                <p className={`text-2xl font-bold ${displayHumidity != null ? "text-blue-600 dark:text-blue-400" : "text-muted-foreground"}`}>
+                  {displayHumidity != null ? displayHumidity.toFixed(1) : "--"}
                   <span className="text-sm font-normal ml-0.5">%</span>
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">Humidity</p>
               </div>
 
               {/* Soil Moisture */}
-              <div className="bg-green-50 dark:bg-green-950/30 rounded-xl p-4 text-center">
-                <Leaf className="h-6 w-6 mx-auto text-green-500 mb-1" />
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                  {latestReading.soil_moisture !== null ? soilPercent(latestReading.soil_moisture) : "--"}
+              <div className={`rounded-xl p-4 text-center ${displaySoilMoisture != null ? "bg-green-50 dark:bg-green-950/30" : "bg-muted/30"}`}>
+                <Leaf className={`h-6 w-6 mx-auto mb-1 ${displaySoilMoisture != null ? "text-green-500" : "text-muted-foreground/40"}`} />
+                <p className={`text-2xl font-bold ${displaySoilMoisture != null ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}>
+                  {displaySoilMoisture != null ? displaySoilMoisture : "--"}
                   <span className="text-sm font-normal ml-0.5">%</span>
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">Soil Moisture</p>
@@ -143,18 +167,18 @@ export function LiveSensorPanel({
               <div className="rounded-xl p-4 text-center flex flex-col justify-center gap-2 bg-gray-50 dark:bg-gray-900/30">
                 <div className="flex items-center justify-center gap-1.5">
                   <CloudRain
-                    className={`h-5 w-5 ${(latestReading.rain ?? "").toUpperCase() === "YES" ? "text-blue-500" : "text-muted-foreground/40"}`}
+                    className={`h-5 w-5 ${(latestReading?.rain ?? lastValidReading.rain ?? "").toUpperCase() === "YES" ? "text-blue-500" : "text-muted-foreground/40"}`}
                   />
-                  <span className={`text-sm font-semibold ${(latestReading.rain ?? "").toUpperCase() === "YES" ? "text-blue-600 dark:text-blue-400" : "text-muted-foreground"}`}>
-                    {(latestReading.rain ?? "").toUpperCase() === "YES" ? "Raining" : "No Rain"}
+                  <span className={`text-sm font-semibold ${(latestReading?.rain ?? lastValidReading.rain ?? "").toUpperCase() === "YES" ? "text-blue-600 dark:text-blue-400" : "text-muted-foreground"}`}>
+                    {(latestReading?.rain ?? lastValidReading.rain ?? "").toUpperCase() === "YES" ? "Raining" : "No Rain"}
                   </span>
                 </div>
                 <div className="flex items-center justify-center gap-1.5">
                   <Power
-                    className={`h-5 w-5 ${(latestReading.pump ?? "").toUpperCase() === "ON" ? "text-green-500" : "text-muted-foreground/40"}`}
+                    className={`h-5 w-5 ${(latestReading?.pump ?? lastValidReading.pump ?? "").toUpperCase() === "ON" ? "text-green-500" : "text-muted-foreground/40"}`}
                   />
-                  <span className={`text-sm font-semibold ${(latestReading.pump ?? "").toUpperCase() === "ON" ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}>
-                    Pump {(latestReading.pump ?? "").toUpperCase() === "ON" ? "ON" : "OFF"}
+                  <span className={`text-sm font-semibold ${(latestReading?.pump ?? lastValidReading.pump ?? "").toUpperCase() === "ON" ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}>
+                    Pump {(latestReading?.pump ?? lastValidReading.pump ?? "").toUpperCase() === "ON" ? "ON" : "OFF"}
                   </span>
                 </div>
               </div>
@@ -188,13 +212,13 @@ export function LiveSensorPanel({
                             {formatTime(r.created_at)}
                           </td>
                           <td className="text-right px-3 py-1.5">
-                            {r.temperature?.toFixed(1) ?? "--"}
+                            {r.temperature && r.temperature !== 0 ? r.temperature.toFixed(1) : "--"}
                           </td>
                           <td className="text-right px-3 py-1.5">
-                            {r.humidity?.toFixed(1) ?? "--"}
+                            {r.humidity && r.humidity !== 0 ? r.humidity.toFixed(1) : "--"}
                           </td>
                           <td className="text-right px-3 py-1.5">
-                            {r.soil_moisture !== null ? soilPercent(r.soil_moisture) : "--"}
+                            {r.soil_moisture && r.soil_moisture !== 0 ? soilPercent(r.soil_moisture) : "--"}
                           </td>
                           <td className="text-center px-3 py-1.5">
                             {(r.rain ?? "").toUpperCase() === "YES" ? (
@@ -226,7 +250,7 @@ export function LiveSensorPanel({
         ) : (
           <div className="text-center py-8 text-muted-foreground">
             <WifiOff className="h-8 w-8 mx-auto mb-2 opacity-40" />
-            <p>No sensor data found in <code>smart_bloom_data</code>.</p>
+            <p>No valid sensor data found.</p>
             <p className="text-xs mt-1">Make sure your ESP32 is publishing rows to Supabase.</p>
           </div>
         )}
