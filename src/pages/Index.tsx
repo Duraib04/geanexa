@@ -241,6 +241,7 @@ const Index = () => {
         <section className="animate-fade-in" style={{ animationDelay: "0.045s" }}>
           <LiveSensorPanel
             latestReading={liveLatestReading}
+            lastValidReading={liveLastValidReading}
             readings={liveReadings}
             isConnected={esp32Connected}
             isLoading={liveLoading}
