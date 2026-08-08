@@ -407,8 +407,8 @@ interface Translations {
 
 const translations: Record<Language, Translations> = {
   en: {
-    appName: 'AquaSmart',
-    smartIrrigation: 'Smart Watering',
+    appName: 'GeaNexa',
+    smartIrrigation: 'Smart Farming',
     systemOnline: 'System Working',
     lastSync: 'Last checked',
     minAgo: 'min ago',
