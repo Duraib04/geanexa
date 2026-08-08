@@ -46,6 +46,7 @@ const Index = () => {
   // LIVE ESP32 data from smart_bloom_data table
   const {
     latestReading: liveLatestReading,
+    lastValidReading: liveLastValidReading,
     readings: liveReadings,
     aggregatedData: liveData,
     chartData: liveChartData,
