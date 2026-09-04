@@ -38,9 +38,7 @@ export function Header({ onMenuClick, className }: HeaderProps) {
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#4285F4] text-white font-semibold text-xl" aria-label="Google Developer Groups">
-              G
-            </div>
+            <img src="/favicon.svg" alt="GeaNexa" className="h-10 w-10 rounded-xl shadow-sm" />
             <div className="hidden sm:block">
               <h1 className="text-lg font-display">{t.appName}</h1>
               <p className="text-xs text-muted-foreground">Google Developer Groups</p>

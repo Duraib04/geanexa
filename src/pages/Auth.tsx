@@ -111,9 +111,7 @@ const Auth = () => {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground">
-            <Leaf className="h-7 w-7" />
-          </div>
+          <img src="/favicon.svg" alt="GeaNexa" className="h-12 w-12 rounded-xl shadow-md" />
           <div>
             <h1 className="text-2xl font-display">GeaNexa</h1>
             <p className="text-sm text-muted-foreground">{t.smartIrrigation}</p>
