@@ -205,7 +205,15 @@ interface Message {
         className="fixed bottom-6 right-6 h-20 w-20 rounded-full shadow-xl bg-transparent hover:scale-105 z-50 overflow-hidden p-0 border-4 border-card transition-transform"
         size="icon"
       >
-        <Mic className="h-7 w-7" />
+        <video
+          className="h-full w-full object-cover rounded-full"
+          src="/avatar-video/WhatsApp%20Video%202026-09-04%20at%207.10.23%20PM.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label="Open GeaNexa chatbot"
+        />
       </Button>
     );
   }
@@ -233,7 +241,15 @@ interface Message {
                 aria-label="GeaNexa speaking animation"
               />
             ) : (
-              <Mic className="h-5 w-5" />
+              <video
+                className="h-10 w-10 rounded-full object-cover"
+                src="/avatar-video/WhatsApp%20Video%202026-09-04%20at%207.10.23%20PM.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                aria-label="GeaNexa idle animation"
+              />
             )}
           </div>
           <div>
@@ -263,7 +279,15 @@ interface Message {
                   alt="GeaNexa listening avatar"
                 />
               ) : (
-                <Mic className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                <video
+                  className="h-24 w-24 mx-auto mb-3 rounded-2xl object-cover shadow-lg ring-2 ring-primary/20"
+                  src="/avatar-video/WhatsApp%20Video%202026-09-04%20at%207.10.23%20PM.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  aria-label="GeaNexa idle animation"
+                />
               )}
               <p className="text-sm">{t.tapToSpeak}</p>
             </div>
