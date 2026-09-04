@@ -1,19 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="GeaNexa leaf logo">
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="GeaNexa sprout logo">
   <defs>
-    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#16a05a" />
-      <stop offset="1" stop-color="#006b3f" />
+    <linearGradient id="field" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#079451" />
+      <stop offset="1" stop-color="#006443" />
     </linearGradient>
-    <linearGradient id="leaf" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="#7ed321" />
-      <stop offset="1" stop-color="#c8f400" />
+    <linearGradient id="sprout" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#61cf22" />
+      <stop offset="1" stop-color="#c9f20d" />
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#background)" />
-  <circle cx="256" cy="256" r="188" fill="#20a95b" opacity=".42" />
-  <path d="M256 124c-45 55-61 99-61 139 0 45 25 77 61 94V124Z" fill="url(#leaf)" />
-  <path d="M256 124c45 55 61 99 61 139 0 45-25 77-61 94V124Z" fill="#8be51a" />
-  <path d="M256 354c-31-62-75-97-128-110 4 61 28 101 72 119 19 8 38 7 56-9Z" fill="url(#leaf)" />
-  <path d="M256 354c31-62 75-97 128-110-4 61-28 101-72 119-19 8-38 7-56-9Z" fill="#a4ef15" />
-  <path d="M256 253v155M256 354 148 244M256 354l108-110" fill="none" stroke="#9be51e" stroke-width="7" stroke-linecap="round" />
+  <rect width="512" height="512" rx="112" fill="url(#field)" />
+  <circle cx="256" cy="255" r="180" fill="#0bb45d" opacity=".62" />
+  <path d="M255 435c7-72 5-132 4-173" fill="none" stroke="#58c829" stroke-width="9" stroke-linecap="round" />
+  <path d="M258 272c-40-9-75-39-78-88 47 3 75 27 82 68 2 9 0 14-4 20Z" fill="url(#sprout)" />
+  <path d="M259 272c8-61 40-100 87-112-1 52-28 92-75 112-5 2-9 2-12 0Z" fill="url(#sprout)" />
+  <path d="M258 272 181 184M258 272l88-112" fill="none" stroke="#50bf28" stroke-width="4" stroke-linecap="round" opacity=".78" />
+  <path d="M258 271v164" fill="none" stroke="#5fca26" stroke-width="7" stroke-linecap="round" />
 </svg>
