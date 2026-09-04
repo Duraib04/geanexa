@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { supabase } from '@/integrations/supabase/client';
 import {
   AlertCircle,
   MapPin,
@@ -186,22 +187,16 @@ export const CooperativeStoresLocator: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        'http://localhost:54321/functions/v1/cooperative-store-locator',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            latitude,
-            longitude,
-            radiusKm: searchRadius,
-            type: selectedStoreType === 'all' ? 'all' : selectedStoreType,
-          }),
-        }
-      );
+      const { data, error: functionError } = await supabase.functions.invoke('cooperative-store-locator', {
+        body: {
+          latitude,
+          longitude,
+          radiusKm: searchRadius,
+          type: selectedStoreType === 'all' ? 'all' : selectedStoreType,
+        },
+      });
 
-      if (!response.ok) throw new Error('Failed to fetch stores');
-      const data = await response.json();
+      if (functionError) throw functionError;
       setStores(data.stores || []);
     } catch (err) {
       // Fallback to sample data when edge function is not available

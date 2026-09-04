@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { supabase } from '@/integrations/supabase/client';
 import {
   AlertCircle,
   ChevronDown,
@@ -196,21 +197,15 @@ export const GovernmentSchemesFinder: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        'http://localhost:54321/functions/v1/government-schemes',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            state: selectedState,
-            category: selectedCategory,
-            language: 'en',
-          }),
-        }
-      );
+      const { data, error: functionError } = await supabase.functions.invoke('government-schemes', {
+        body: {
+          state: selectedState,
+          category: selectedCategory,
+          language: 'en',
+        },
+      });
 
-      if (!response.ok) throw new Error('Failed to fetch schemes');
-      const data = await response.json();
+      if (functionError) throw functionError;
       setSchemes(data.allSchemes || []);
     } catch (err) {
       // Fallback to sample data when edge function is not available
