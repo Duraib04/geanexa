@@ -41,7 +41,7 @@ export function Header({ onMenuClick, className }: HeaderProps) {
             <img src="/favicon.svg" alt="GeaNexa" className="h-10 w-10 rounded-xl shadow-sm" />
             <div className="hidden sm:block">
               <h1 className="text-lg font-display">{t.appName}</h1>
-              <p className="text-xs text-muted-foreground">Google Developer Groups</p>
+              <p className="text-xs text-muted-foreground">Smart Irrigation &amp; Crop Care</p>
             </div>
           </div>
         </div>
