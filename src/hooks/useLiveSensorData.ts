@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { applyCalibration } from "@/hooks/useSoilCalibration";
 
 export interface SmartBloomReading {
   id: string;
@@ -114,7 +115,7 @@ export function useLiveSensorData() {
   const [retryCount, setRetryCount] = useState(0);
 
   const mapToAggregated = useCallback((r: SmartBloomReading): LiveAggregatedData => ({
-    soilMoisture: Math.round(Math.max(0, Math.min(100, r.soil_moisture ?? 0))),
+    soilMoisture: applyCalibration(r.soil_moisture) ?? 0,
     temperature: r.temperature ?? 0,
     humidity: r.humidity ?? 0,
     raining: (r.rain ?? "").toUpperCase() === "YES",
@@ -127,7 +128,7 @@ export function useLiveSensorData() {
       const date = new Date(r.created_at);
       return {
         time: date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
-        moisture: Math.round(Math.max(0, Math.min(100, r.soil_moisture ?? 0))),
+        moisture: applyCalibration(r.soil_moisture) ?? 0,
         optimal: 70,
       };
     });

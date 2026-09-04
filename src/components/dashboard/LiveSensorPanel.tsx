@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SmartBloomReading, LastValidReading } from "@/hooks/useLiveSensorData";
+import { useSoilCalibration, applyCalibration } from "@/hooks/useSoilCalibration";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import {
   Thermometer,
   Droplets,
@@ -13,6 +16,8 @@ import {
   WifiOff,
   RefreshCw,
   Leaf,
+  AlertTriangle,
+  Settings2,
 } from "lucide-react";
 
 interface LiveSensorPanelProps {
@@ -22,7 +27,9 @@ interface LiveSensorPanelProps {
   isConnected: boolean;
   isLoading: boolean;
   error: string | null;
+  realtimeError?: string | null;
   onRefresh: () => void;
+  onRetry?: () => void;
 }
 
 export function LiveSensorPanel({
@@ -32,9 +39,12 @@ export function LiveSensorPanel({
   isConnected,
   isLoading,
   error,
+  realtimeError,
   onRefresh,
+  onRetry,
 }: LiveSensorPanelProps) {
   const { t } = useLanguage();
+  const { calibration } = useSoilCalibration();
 
   const formatTime = (ts: string) => {
     const d = new Date(ts);
@@ -54,12 +64,8 @@ export function LiveSensorPanel({
     return `${Math.floor(diffSec / 3600)}h ago`;
   };
 
-  // Map raw soil integer to a moisture percentage for display
-  const soilPercent = (raw: number | null) => {
-    if (raw === null) return null;
-    if (raw <= 100) return raw;
-    return Math.round(((1023 - raw) / 1023) * 100);
-  };
+  // Map raw soil ADC value to a moisture percentage using saved calibration
+  const soilPercent = (raw: number | null) => applyCalibration(raw, calibration);
 
   const displayTemperature =
     (latestReading?.temperature && latestReading.temperature !== 0)
@@ -92,6 +98,13 @@ export function LiveSensorPanel({
             Live ESP32 Sensor Data
           </CardTitle>
           <div className="flex items-center gap-2">
+            <Link
+              to="/calibration"
+              className="p-1.5 rounded-md hover:bg-muted transition-colors"
+              title="Soil moisture calibration"
+            >
+              <Settings2 className="h-4 w-4" />
+            </Link>
             <button
               onClick={onRefresh}
               className="p-1.5 rounded-md hover:bg-muted transition-colors"
@@ -124,8 +137,26 @@ export function LiveSensorPanel({
 
       <CardContent className="space-y-4">
         {error && (
-          <div className="bg-destructive/10 text-destructive text-sm rounded-md px-3 py-2">
-            {error}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 justify-between bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-md px-3 py-2">
+            <span className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              Can't reach the database: {error}. Retrying automatically...
+            </span>
+            <Button size="sm" variant="destructive" onClick={onRetry ?? onRefresh}>
+              <RefreshCw className="h-3.5 w-3.5 mr-1.5" /> Retry now
+            </Button>
+          </div>
+        )}
+
+        {!error && realtimeError && (
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 justify-between bg-warning/10 border border-warning/30 text-warning text-sm rounded-md px-3 py-2">
+            <span className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              {realtimeError}
+            </span>
+            <Button size="sm" variant="outline" onClick={onRetry ?? onRefresh}>
+              <RefreshCw className="h-3.5 w-3.5 mr-1.5" /> Reconnect
+            </Button>
           </div>
         )}
 
@@ -163,24 +194,36 @@ export function LiveSensorPanel({
                 <p className="text-xs text-muted-foreground mt-1">Soil Moisture</p>
               </div>
 
-              {/* Rain + Pump */}
-              <div className="rounded-xl p-4 text-center flex flex-col justify-center gap-2 bg-gray-50 dark:bg-gray-900/30">
-                <div className="flex items-center justify-center gap-1.5">
-                  <CloudRain
-                    className={`h-5 w-5 ${(latestReading?.rain ?? lastValidReading.rain ?? "").toUpperCase() === "YES" ? "text-blue-500" : "text-muted-foreground/40"}`}
-                  />
-                  <span className={`text-sm font-semibold ${(latestReading?.rain ?? lastValidReading.rain ?? "").toUpperCase() === "YES" ? "text-blue-600 dark:text-blue-400" : "text-muted-foreground"}`}>
-                    {(latestReading?.rain ?? lastValidReading.rain ?? "").toUpperCase() === "YES" ? "Raining" : "No Rain"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center gap-1.5">
-                  <Power
-                    className={`h-5 w-5 ${(latestReading?.pump ?? lastValidReading.pump ?? "").toUpperCase() === "ON" ? "text-green-500" : "text-muted-foreground/40"}`}
-                  />
-                  <span className={`text-sm font-semibold ${(latestReading?.pump ?? lastValidReading.pump ?? "").toUpperCase() === "ON" ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}>
-                    Pump {(latestReading?.pump ?? lastValidReading.pump ?? "").toUpperCase() === "ON" ? "ON" : "OFF"}
-                  </span>
-                </div>
+              {/* Rain + Pump status badges */}
+              <div className="rounded-xl p-4 flex flex-col justify-center gap-2 bg-muted/40">
+                {(() => {
+                  const rainOn = (latestReading?.rain ?? lastValidReading.rain ?? "").toUpperCase() === "YES";
+                  const pumpOn = (latestReading?.pump ?? lastValidReading.pump ?? "").toUpperCase() === "ON";
+                  return (
+                    <>
+                      <Badge
+                        className={`w-full justify-center gap-1.5 py-1.5 text-sm ${
+                          rainOn
+                            ? "bg-accent text-accent-foreground hover:bg-accent"
+                            : "bg-muted text-muted-foreground hover:bg-muted"
+                        }`}
+                      >
+                        <CloudRain className="h-4 w-4" />
+                        Rain: {rainOn ? "YES" : "NO"}
+                      </Badge>
+                      <Badge
+                        className={`w-full justify-center gap-1.5 py-1.5 text-sm ${
+                          pumpOn
+                            ? "bg-success text-success-foreground hover:bg-success animate-pulse"
+                            : "bg-muted text-muted-foreground hover:bg-muted"
+                        }`}
+                      >
+                        <Power className="h-4 w-4" />
+                        Pump: {pumpOn ? "ON" : "OFF"}
+                      </Badge>
+                    </>
+                  );
+                })()}
               </div>
             </div>
 
@@ -221,18 +264,14 @@ export function LiveSensorPanel({
                             {r.soil_moisture && r.soil_moisture !== 0 ? soilPercent(r.soil_moisture) : "--"}
                           </td>
                           <td className="text-center px-3 py-1.5">
-                            {(r.rain ?? "").toUpperCase() === "YES" ? (
-                              <span className="text-blue-500">Yes</span>
-                            ) : (
-                              <span className="text-muted-foreground">No</span>
-                            )}
+                            <Badge variant="outline" className={(r.rain ?? "").toUpperCase() === "YES" ? "border-accent text-accent" : "text-muted-foreground"}>
+                              {(r.rain ?? "").toUpperCase() === "YES" ? "YES" : "NO"}
+                            </Badge>
                           </td>
                           <td className="text-center px-3 py-1.5">
-                            {(r.pump ?? "").toUpperCase() === "ON" ? (
-                              <span className="text-green-500">ON</span>
-                            ) : (
-                              <span className="text-muted-foreground">OFF</span>
-                            )}
+                            <Badge variant="outline" className={(r.pump ?? "").toUpperCase() === "ON" ? "border-success text-success" : "text-muted-foreground"}>
+                              {(r.pump ?? "").toUpperCase() === "ON" ? "ON" : "OFF"}
+                            </Badge>
                           </td>
                         </tr>
                       ))}
