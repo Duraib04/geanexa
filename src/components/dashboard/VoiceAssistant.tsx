@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mic, MicOff, Volume2, Send, Loader2, MessageCircle, RefreshCw } from "lucide-react";
+import { Mic, MicOff, Volume2, Send, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -202,10 +202,18 @@ interface Message {
     return (
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-lg bg-primary hover:bg-primary/90 z-50"
+        className="fixed bottom-6 right-6 h-20 w-20 rounded-full shadow-xl bg-transparent hover:scale-105 z-50 overflow-hidden p-0 border-4 border-card transition-transform"
         size="icon"
       >
-        <MessageCircle className="h-7 w-7" />
+        <video
+          className="h-full w-full object-cover rounded-full"
+          src="/avatar-video/replay.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label="Open GeaNexa chatbot"
+        />
       </Button>
     );
   }
