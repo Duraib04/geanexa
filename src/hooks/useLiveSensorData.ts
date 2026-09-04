@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { applyCalibration } from "@/hooks/useSoilCalibration";
 
 export interface SmartBloomReading {
   id: string;
@@ -110,9 +111,11 @@ export function useLiveSensorData() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [realtimeError, setRealtimeError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   const mapToAggregated = useCallback((r: SmartBloomReading): LiveAggregatedData => ({
-    soilMoisture: Math.round(Math.max(0, Math.min(100, r.soil_moisture ?? 0))),
+    soilMoisture: applyCalibration(r.soil_moisture) ?? 0,
     temperature: r.temperature ?? 0,
     humidity: r.humidity ?? 0,
     raining: (r.rain ?? "").toUpperCase() === "YES",
@@ -125,7 +128,7 @@ export function useLiveSensorData() {
       const date = new Date(r.created_at);
       return {
         time: date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
-        moisture: Math.round(Math.max(0, Math.min(100, r.soil_moisture ?? 0))),
+        moisture: applyCalibration(r.soil_moisture) ?? 0,
         optimal: 70,
       };
     });
@@ -142,6 +145,7 @@ export function useLiveSensorData() {
 
       if (fetchError) {
         console.log(`${TABLE} fetch error:`, fetchError.message);
+        setError(fetchError.message);
         setIsConnected(false);
         setIsLoading(false);
         return;
@@ -167,6 +171,29 @@ export function useLiveSensorData() {
     }
   }, [mapToAggregated, buildChartData]);
 
+  // Auto-retry with backoff whenever the dashboard can't reach the database
+  useEffect(() => {
+    if (!error && isConnected) {
+      setRetryCount(0);
+      return;
+    }
+    if (!error && !isConnected) return;
+    if (retryCount >= 5) return;
+    const delay = Math.min(30_000, 2000 * 2 ** retryCount);
+    const timer = setTimeout(() => {
+      setRetryCount((c) => c + 1);
+      fetchReadings();
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [error, isConnected, retryCount, fetchReadings]);
+
+  const retry = useCallback(() => {
+    setRetryCount(0);
+    setIsLoading(true);
+    setRealtimeError(null);
+    fetchReadings();
+  }, [fetchReadings]);
+
   useEffect(() => {
     fetchReadings();
 
@@ -190,8 +217,13 @@ export function useLiveSensorData() {
         }
       )
       .subscribe((status) => {
-        console.log("Supabase realtime status:", status);
-        if (status === "SUBSCRIBED") setIsConnected(true);
+        console.log("Realtime status:", status);
+        if (status === "SUBSCRIBED") {
+          setIsConnected(true);
+          setRealtimeError(null);
+        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+          setRealtimeError("Live updates disconnected — falling back to periodic refresh.");
+        }
       });
 
     const pollInterval = setInterval(fetchReadings, 30_000);
@@ -233,6 +265,9 @@ export function useLiveSensorData() {
     isLoading,
     error,
     isConnected,
+    realtimeError,
+    retryCount,
+    retry,
     refetch: fetchReadings,
     togglePump,
   };

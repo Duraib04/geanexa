@@ -53,6 +53,8 @@ const Index = () => {
     isConnected: esp32Connected,
     isLoading: liveLoading,
     error: liveError,
+    realtimeError: liveRealtimeError,
+    retry: retryLive,
     togglePump,
     refetch: refetchLive,
   } = useLiveSensorData();
@@ -247,7 +249,9 @@ const Index = () => {
             isConnected={esp32Connected}
             isLoading={liveLoading}
             error={liveError}
+            realtimeError={liveRealtimeError}
             onRefresh={refetchLive}
+            onRetry={retryLive}
           />
         </section>
 

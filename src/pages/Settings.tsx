@@ -5,7 +5,7 @@
  import { Label } from "@/components/ui/label";
  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
  import { Slider } from "@/components/ui/slider";
- import { ArrowLeft, Bell, Thermometer, Globe, Loader2 } from "lucide-react";
+ import { ArrowLeft, Bell, Thermometer, Globe, Loader2, Gauge, ChevronRight } from "lucide-react";
  import { useSettings } from "@/hooks/useSettings";
  import { useAuth } from "@/hooks/useAuth";
  import { useToast } from "@/hooks/use-toast";
@@ -159,6 +159,21 @@
                  <SelectItem value="hi">हिंदी (Hindi)</SelectItem>
                </SelectContent>
              </Select>
+           </CardContent>
+         </Card>
+         <Card>
+           <CardHeader>
+             <CardTitle className="flex items-center gap-2">
+               <Gauge className="h-5 w-5" />
+               Soil Moisture Calibration
+             </CardTitle>
+             <CardDescription>Adjust the ADC-to-percentage mapping for your soil probe</CardDescription>
+           </CardHeader>
+           <CardContent>
+             <Button variant="outline" className="w-full justify-between" onClick={() => navigate("/calibration")}>
+               Open calibration settings
+               <ChevronRight className="h-4 w-4" />
+             </Button>
            </CardContent>
          </Card>
        </main>
