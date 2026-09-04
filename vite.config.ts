@@ -20,9 +20,9 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'robots.txt'],
       manifest: {
-        name: 'FarmWise - Smart Irrigation',
-        short_name: 'FarmWise',
-        description: 'Smart irrigation management for modern farmers',
+        name: 'GeaNexa - Smart Farming',
+        short_name: 'GeaNexa',
+        description: 'GeaNexa smart farming and irrigation management',
         theme_color: '#22c55e',
         background_color: '#0f172a',
         display: 'standalone',
