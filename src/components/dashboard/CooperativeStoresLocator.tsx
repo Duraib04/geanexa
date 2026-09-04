@@ -176,7 +176,6 @@ export const CooperativeStoresLocator: React.FC = () => {
       }
     ];
 
-    // Filter by type if not 'all'
     if (selectedStoreType !== 'all') {
       return sampleStores.filter(store => store.type === selectedStoreType);
     }
@@ -199,7 +198,6 @@ export const CooperativeStoresLocator: React.FC = () => {
       if (functionError) throw functionError;
       setStores(data.stores || []);
     } catch (err) {
-      // Fallback to sample data when edge function is not available
       console.log('Using sample stores data - Supabase edge function not available');
       const sampleStores = getSampleStores(latitude, longitude);
       setStores(sampleStores);

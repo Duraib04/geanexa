@@ -176,12 +176,10 @@ export const GovernmentSchemesFinder: React.FC = () => {
       }
     ];
 
-    // Filter by state
     let filteredSchemes = sampleSchemes.filter(scheme => 
       scheme.state.includes('National') || scheme.state.includes(selectedState)
     );
 
-    // Filter by category
     if (selectedCategory !== 'all') {
       filteredSchemes = filteredSchemes.filter(scheme => scheme.category === selectedCategory);
     }
@@ -208,7 +206,6 @@ export const GovernmentSchemesFinder: React.FC = () => {
       if (functionError) throw functionError;
       setSchemes(data.allSchemes || []);
     } catch (err) {
-      // Fallback to sample data when edge function is not available
       console.log('Using sample schemes data - Supabase edge function not available');
       const sampleSchemes = getSampleSchemes();
       setSchemes(sampleSchemes);
