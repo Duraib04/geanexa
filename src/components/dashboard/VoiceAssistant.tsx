@@ -216,7 +216,13 @@ interface Message {
       <div className="bg-primary text-primary-foreground p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-            {isSpeaking ? (
+            {isListening ? (
+              <img
+                className="h-10 w-10 rounded-full object-cover"
+                src="/cow-avatar.png"
+                alt="GeaNexa listening avatar"
+              />
+            ) : isSpeaking ? (
               <video
                 className="h-10 w-10 rounded-full object-cover"
                 src="/avatar-video/replay.mp4"
@@ -250,7 +256,15 @@ interface Message {
         <div className="h-64 overflow-y-auto p-4 space-y-3 bg-muted/30">
           {messages.length === 0 && (
             <div className="text-center text-muted-foreground py-8">
-              <Mic className="h-12 w-12 mx-auto mb-3 opacity-50" />
+              {isListening ? (
+                <img
+                  className="h-24 w-24 mx-auto mb-3 rounded-2xl object-cover shadow-lg ring-2 ring-primary/20"
+                  src="/cow-avatar.png"
+                  alt="GeaNexa listening avatar"
+                />
+              ) : (
+                <Mic className="h-12 w-12 mx-auto mb-3 opacity-50" />
+              )}
               <p className="text-sm">{t.tapToSpeak}</p>
             </div>
           )}
