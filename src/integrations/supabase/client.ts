@@ -1,5 +1,6 @@
 ﻿import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
+import { brokeredPreviewStorage } from './previewAuthStorage';
 
 // SENSOR DATA CLIENT - New Supabase project with smart_bloom_data table (ESP32 sensor readings)
 const SENSOR_SUPABASE_URL = "https://nynciqqkmavfazabkgud.supabase.co";
@@ -12,7 +13,7 @@ const CHATBOT_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
 // Default client for general use (farm data, auth, etc.) - uses old project
 export const supabase = createClient<Database>(CHATBOT_SUPABASE_URL, CHATBOT_SUPABASE_ANON_KEY, {
   auth: {
-    storage: localStorage,
+    storage: brokeredPreviewStorage(),
     persistSession: true,
     autoRefreshToken: true,
   }
@@ -21,7 +22,7 @@ export const supabase = createClient<Database>(CHATBOT_SUPABASE_URL, CHATBOT_SUP
 // Sensor data client for ESP32 realtime readings - uses new project
 export const sensorSupabase = createClient<Database>(SENSOR_SUPABASE_URL, SENSOR_SUPABASE_ANON_KEY, {
   auth: {
-    storage: localStorage,
+    storage: brokeredPreviewStorage(),
     persistSession: true,
     autoRefreshToken: true,
   }
