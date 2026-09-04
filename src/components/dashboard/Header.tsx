@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Leaf, Settings, Menu, LogIn } from "lucide-react";
+import { Settings, Menu, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "./LanguageSelector";
@@ -38,12 +38,12 @@ export function Header({ onMenuClick, className }: HeaderProps) {
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-primary-foreground">
-              <Leaf className="h-6 w-6" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#4285F4] text-white font-semibold text-xl" aria-label="Google Developer Groups">
+              G
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-display font-bold">{t.appName}</h1>
-              <p className="text-xs text-muted-foreground">{t.smartIrrigation}</p>
+              <h1 className="text-lg font-display">{t.appName}</h1>
+              <p className="text-xs text-muted-foreground">Google Developer Groups</p>
             </div>
           </div>
         </div>

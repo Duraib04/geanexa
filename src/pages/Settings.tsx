@@ -5,7 +5,7 @@
  import { Label } from "@/components/ui/label";
  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
  import { Slider } from "@/components/ui/slider";
- import { ArrowLeft, Bell, Thermometer, Globe, Loader2, Gauge, ChevronRight } from "lucide-react";
+ import { ArrowLeft, Bell, Thermometer, Globe, Loader2, Gauge, ChevronRight, Users, ExternalLink } from "lucide-react";
  import { useSettings } from "@/hooks/useSettings";
  import { useAuth } from "@/hooks/useAuth";
  import { useToast } from "@/hooks/use-toast";
@@ -85,6 +85,26 @@
                </div>
                <Button variant="outline" onClick={handleSignOut}>{t.signOut}</Button>
              </div>
+           </CardContent>
+         </Card>
+
+         <Card>
+           <CardHeader>
+             <CardTitle className="flex items-center gap-2">
+               <Users className="h-5 w-5 text-primary" />
+               About GDG Coimbatore
+             </CardTitle>
+             <CardDescription>Learning, connection, and technology for every developer.</CardDescription>
+           </CardHeader>
+           <CardContent className="space-y-4 text-sm">
+             <div className="grid gap-3 sm:grid-cols-3">
+               <div><p className="text-muted-foreground">GDG Organizer</p><p className="font-medium">Durai B</p></div>
+               <div><p className="text-muted-foreground">Team member</p><p className="font-medium">NITHYA RUBINI</p></div>
+               <div><p className="text-muted-foreground">Team member</p><p className="font-medium">MAHBUBA YASMIN LASKAR</p></div>
+             </div>
+             <a className="inline-flex items-center gap-2 text-primary hover:underline" href="https://duraib.vercel.app" target="_blank" rel="noreferrer">
+               Visit duraib.vercel.app <ExternalLink className="h-4 w-4" />
+             </a>
            </CardContent>
          </Card>
  

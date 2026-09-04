@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Space Grotesk", "system-ui", "sans-serif"],
+        sans: ["Google Sans", "Google Sans Text", "Arial", "sans-serif"],
+        display: ["Google Sans", "Google Sans Text", "Arial", "sans-serif"],
+        mono: ["Google Sans Mono", "Roboto Mono", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",

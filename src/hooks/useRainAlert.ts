@@ -78,7 +78,7 @@
        }
        
        if (Notification.permission === "granted") {
-         new Notification("🌧️ Rain Alert - AquaSmart", {
+         new Notification("🌧️ Rain Alert - GDG Coimbatore", {
            body: message,
            icon: "/favicon.ico",
            tag: "rain-alert",
