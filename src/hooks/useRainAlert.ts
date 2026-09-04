@@ -78,7 +78,7 @@
        }
        
        if (Notification.permission === "granted") {
-         new Notification("🌧️ Rain Alert - GDG Coimbatore", {
+         new Notification("🌧️ Rain Alert - GeaNexa", {
            body: message,
            icon: "/favicon.ico",
            tag: "rain-alert",

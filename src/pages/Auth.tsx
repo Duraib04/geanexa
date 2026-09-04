@@ -115,7 +115,7 @@ const Auth = () => {
             <Leaf className="h-7 w-7" />
           </div>
           <div>
-            <h1 className="text-2xl font-display">GDG Coimbatore</h1>
+            <h1 className="text-2xl font-display">GeaNexa</h1>
             <p className="text-sm text-muted-foreground">{t.smartIrrigation}</p>
           </div>
         </div>

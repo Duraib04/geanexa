@@ -407,7 +407,7 @@ interface Translations {
 
 const translations: Record<Language, Translations> = {
   en: {
-    appName: 'GDG Coimbatore',
+    appName: 'GeaNexa',
     smartIrrigation: 'Smart Farming',
     systemOnline: 'System Working',
     lastSync: 'Last checked',
@@ -531,7 +531,7 @@ const translations: Record<Language, Translations> = {
     // Install
     installApp: 'Install App',
     appInstalled: 'App Already Installed!',
-    appInstalledDesc: 'GDG Coimbatore is already installed on your device. Look for it on your home screen.',
+    appInstalledDesc: 'GeaNexa is already installed on your device. Look for it on your home screen.',
     installDescription: 'Install the app on your device for quick access, offline support, and a native experience.',
     installNow: 'Install Now',
     installOnIos: 'Install on iOS',
@@ -788,7 +788,7 @@ const translations: Record<Language, Translations> = {
     marketSummary: 'Market Summary',
   },
   ta: {
-    appName: 'GDG Coimbatore',
+    appName: 'GeaNexa',
     smartIrrigation: 'ஸ்மார்ட் நீர்ப்பாசனம்',
     systemOnline: 'சிஸ்டம் வேலை செய்கிறது',
     lastSync: 'கடைசி செக்',
@@ -912,7 +912,7 @@ const translations: Record<Language, Translations> = {
     // Install
     installApp: 'ஆப்பை நிறுவு',
     appInstalled: 'ஆப் ஏற்கனவே நிறுவப்பட்டுள்ளது!',
-    appInstalledDesc: 'GDG Coimbatore உங்கள் சாதனத்தில் ஏற்கனவே நிறுவப்பட்டுள்ளது. முகப்பு திரையில் பாருங்கள்.',
+    appInstalledDesc: 'GeaNexa உங்கள் சாதனத்தில் ஏற்கனவே நிறுவப்பட்டுள்ளது. முகப்பு திரையில் பாருங்கள்.',
     installDescription: 'விரைவான அணுகல், ஆஃப்லைன் ஆதரவு மற்றும் நேட்டிவ் அனுபவத்திற்கு ஆப்பை நிறுவுங்கள்.',
     installNow: 'இப்போது நிறுவு',
     installOnIos: 'iOS-ல் நிறுவு',
@@ -1169,7 +1169,7 @@ const translations: Record<Language, Translations> = {
     marketSummary: 'சந்தை சுருக்கம்',
   },
   tanglish: {
-    appName: 'GDG Coimbatore',
+    appName: 'GeaNexa',
     smartIrrigation: 'Smart Thanneer Paasanam',
     systemOnline: 'System Velai Seiyudhu',
     lastSync: 'Last check',
@@ -1293,7 +1293,7 @@ const translations: Record<Language, Translations> = {
     // Install
     installApp: 'App Install Pannu',
     appInstalled: 'App Already Installed!',
-    appInstalledDesc: 'GDG Coimbatore unga device-la already install aayiduchu. Home screen-la parunga.',
+    appInstalledDesc: 'GeaNexa unga device-la already install aayiduchu. Home screen-la parunga.',
     installDescription: 'Quick access, offline support, native experience ku app install pannunga.',
     installNow: 'Ippo Install Pannu',
     installOnIos: 'iOS-la Install Pannu',
@@ -1550,7 +1550,7 @@ const translations: Record<Language, Translations> = {
     marketSummary: 'Market Summary',
   },
   hi: {
-    appName: 'GDG Coimbatore',
+    appName: 'GeaNexa',
     smartIrrigation: 'स्मार्ट सिंचाई',
     systemOnline: 'सिस्टम चल रहा है',
     lastSync: 'आखिरी जांच',
@@ -1674,7 +1674,7 @@ const translations: Record<Language, Translations> = {
     // Install
     installApp: 'ऐप इंस्टॉल करें',
     appInstalled: 'ऐप पहले से इंस्टॉल है!',
-    appInstalledDesc: 'GDG Coimbatore आपके डिवाइस पर पहले से इंस्टॉल है। होम स्क्रीन पर देखें।',
+    appInstalledDesc: 'GeaNexa आपके डिवाइस पर पहले से इंस्टॉल है। होम स्क्रीन पर देखें।',
     installDescription: 'त्वरित एक्सेस, ऑफलाइन सपोर्ट और नेटिव अनुभव के लिए ऐप इंस्टॉल करें।',
     installNow: 'अभी इंस्टॉल करें',
     installOnIos: 'iOS पर इंस्टॉल करें',

@@ -6,65 +6,65 @@
 
 @layer base {
   :root {
-    /* GDG-inspired light theme with Google Blue as the anchor color. */
-    --background: 210 30% 98%;
-    --foreground: 220 25% 16%;
+    /* Mint-to-teal palette inspired by the supplied color reference. */
+    --background: 90 28% 96%;
+    --foreground: 160 36% 14%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 16%;
+    --card-foreground: 160 36% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 16%;
+    --popover-foreground: 160 36% 14%;
 
-    --primary: 217 89% 61%;
+    --primary: 158 65% 24%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 214 54% 94%;
-    --secondary-foreground: 220 25% 20%;
+    --secondary: 96 40% 84%;
+    --secondary-foreground: 160 36% 16%;
 
-    --muted: 210 24% 94%;
-    --muted-foreground: 220 12% 45%;
+    --muted: 94 30% 90%;
+    --muted-foreground: 158 16% 40%;
 
-    --accent: 45 97% 53%;
+    --accent: 79 47% 51%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
     /* Success - Vibrant Green */
-    --success: 145 63% 42%;
+    --success: 148 47% 34%;
     --success-foreground: 0 0% 100%;
 
     /* Warning - Amber */
-    --warning: 4 78% 58%;
+    --warning: 46 67% 46%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 214 24% 87%;
-    --input: 214 24% 87%;
-    --ring: 217 89% 61%;
+    --border: 100 24% 78%;
+    --input: 100 24% 78%;
+    --ring: 158 65% 24%;
 
     --radius: 0.75rem;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 89% 61%) 0%, hsl(214 80% 52%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(45 97% 53%) 0%, hsl(4 78% 58%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 30% 98%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(217 89% 61%) 0%, hsl(214 80% 52%) 55%, hsl(145 63% 42%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(158 65% 24%) 0%, hsl(148 47% 34%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(79 47% 51%) 0%, hsl(96 40% 68%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(90 28% 99%) 0%, hsl(90 28% 95%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(158 65% 24%) 0%, hsl(148 47% 34%) 54%, hsl(79 47% 51%) 100%);
 
     /* Shadows */
-    --shadow-sm: 0 1px 2px hsl(150 30% 15% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(150 30% 15% / 0.08), 0 2px 4px -1px hsl(150 30% 15% / 0.04);
-    --shadow-lg: 0 10px 15px -3px hsl(150 30% 15% / 0.1), 0 4px 6px -2px hsl(150 30% 15% / 0.05);
-    --shadow-glow: 0 0 20px hsl(152 70% 28% / 0.3);
+    --shadow-sm: 0 2px 5px hsl(158 36% 14% / 0.08);
+    --shadow-md: 0 8px 18px -8px hsl(158 36% 14% / 0.28), 0 3px 8px -4px hsl(158 36% 14% / 0.14);
+    --shadow-lg: 0 18px 34px -14px hsl(158 36% 14% / 0.32), 0 8px 14px -8px hsl(158 36% 14% / 0.16);
+    --shadow-glow: 0 0 24px hsl(79 47% 51% / 0.32);
 
-    --sidebar-background: 210 30% 98%;
-    --sidebar-foreground: 220 25% 20%;
-    --sidebar-primary: 217 89% 61%;
+    --sidebar-background: 94 30% 94%;
+    --sidebar-foreground: 158 36% 16%;
+    --sidebar-primary: 158 65% 24%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 214 54% 94%;
-    --sidebar-accent-foreground: 220 25% 20%;
-    --sidebar-border: 214 24% 90%;
-    --sidebar-ring: 217 89% 61%;
+    --sidebar-accent: 96 40% 84%;
+    --sidebar-accent-foreground: 158 36% 16%;
+    --sidebar-border: 100 24% 82%;
+    --sidebar-ring: 158 65% 24%;
   }
 
   .dark {
@@ -131,6 +131,8 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: "Google Sans", "Google Sans Text", Arial, sans-serif;
+    background-image: radial-gradient(hsl(158 36% 14% / 0.045) 0.7px, transparent 0.7px);
+    background-size: 18px 18px;
   }
 
   code, pre, kbd, .font-mono {
@@ -144,7 +146,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-card/80 backdrop-blur-md border border-border/50 shadow-md;
+    @apply bg-card/85 backdrop-blur-md border border-border/60 shadow-md;
   }
 
   .metric-gauge {
@@ -161,7 +163,11 @@
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .animate-fade-in {
+    animation: fade-rise 0.55s ease-out both;
   }
 }
 
@@ -179,6 +185,11 @@
     50% { transform: translateY(-10px); }
   }
 
+  @keyframes fade-rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   .animate-water-wave {
     animation: wave 2s ease-in-out infinite;
   }
@@ -186,5 +197,14 @@
   @keyframes wave {
     0%, 100% { transform: scaleY(1); }
     50% { transform: scaleY(0.95); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
